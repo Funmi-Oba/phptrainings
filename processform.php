@@ -21,7 +21,7 @@ if($reg==true)
 echo "Registration successful";
 }
 else{
-    echo "Error, while registering";
+    echo "Error while registering... pls try again";
 }
 
 }
