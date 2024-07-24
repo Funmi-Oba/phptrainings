@@ -16,9 +16,10 @@ class User{
 		}
 	}
 
-  public function registerUser($fname, $lname,$email,$phoneno)
+  public function registerUser($fname, $lname,$email,$phoneno,$password)
   {
-$sql = "INSERT INTO user set fname='$fname', lname='$lname', email='$email', phoneno='$phoneno'";
+	$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+$sql = "INSERT INTO user set fname='$fname', lname='$lname', email='$email', phoneno='$phoneno', password='$hashedPassword'";
 $dbcon = $this->dbcon->query($sql);
 if($this->dbcon->affected_rows == 1){
 	return true;
@@ -27,6 +28,59 @@ else{
 	return false;
 }
   }
+
+  public function checkEmail($email){
+$sql = "select * from user where email='$email'";
+$dbcon = $this->dbcon->query($sql);
+if($this->dbcon->affected_rows == 1){
+	return true;
+}
+else{
+	return false;
+}
+  }
+
+  public function updateUser($fname, $lname, $phoneno, $id){
+	$sql = "update user set fname='$fname', lname ='$lname', phoneno='$phoneno' where id ='$id'";
+	$dbcon = $this->dbcon->query($sql);
+	if($this->dbcon->affected_rows == 1){
+		return true;
+	}
+	else{
+		return false;
+	}
+	  }
+	
+	  public function getUserByEmail(){
+		$sql = "select * from user where email='$email'";
+$dbcon = $this->dbcon->query($sql);
+if($this->dbcon->affected_rows == 1){
+	return true;
+}
+else{
+	return false;
+}
+	  }
+
+public function login($email, $password){
+	$sql = "select * from user where email='$email'";
+	$dbcon = $this->dbcon->query($sql);
+	if($this->dbcon->affected_rows == 1){
+		$row = $dbcon->fetch_assoc();
+		$hashedPassword = $row ['password'];
+		$confirmPassword = password_verify($password,$hashedPassword);
+
+		if ($confirmPassword){
+return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+}
+
+
 
 }
 ?>
