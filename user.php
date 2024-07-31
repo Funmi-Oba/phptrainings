@@ -69,7 +69,9 @@ public function login($email, $password){
 		$row = $dbcon->fetch_assoc();
 		$hashedPassword = $row ['password'];
 		$confirmPassword = password_verify($password,$hashedPassword);
-
+		session_start();
+		$_SESSION['fname'] = $row ['fname'];
+		$_SESSION['id'] = $row ['id'];
 		if ($confirmPassword){
 return true;
 		}
@@ -80,7 +82,33 @@ return true;
 	
 }
 
+public function getAllUsers(){
+	$sql = "Select * from user";
+	$dbcon = $this->dbcon->query($sql);
+	$result = array();
+	if($this->dbcon->affected_rows > 0)
+	{
+		while($row = $dbcon->fetch_assoc()){
+			$result[] = $row;
+		}
+	
+		return $result;
+	}else{
+		return $result;
+	}
+}
 
+public function getSingleUser($id){
+	$sql = "select * from user where id='$id'";
+	$dbcon = $this->dbcon->query($sql);
+	if($this->dbcon->affected_rows == 1){
+		$row = $dbcon->fetch_assoc();
+		return $row;
+	}
+	else{
+		return false;
+	}
+}
 
 }
 ?>
